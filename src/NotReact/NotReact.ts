@@ -25,13 +25,6 @@ const useReducer = <S, I, A>(
 const useState = <S>(
   initialState: (() => S) | S
 ): [S, Dispatch<BasicStateAction<S>>] => {
-  // const setStateHookIndex = currentHook;
-  // let state = hooks[setStateHookIndex] || initialState;
-  // currentHook++;
-  // const setState = (newState) => {
-  //   hooks[setStateHookIndex] = newState;
-  // };
-  // return [state, setState];
   return useReducer(basicStateReducer, initialState);
 };
 
@@ -56,15 +49,5 @@ const render = (FunctionComponent) => {
   currentHook = 0;
   return result;
 };
-
-// const createContext = (defaultValue) => {
-//   const context = {
-//     value: defaultValue,
-//     Provider: null,
-//     Consumer: null
-//   }
-
-//   return context
-// }
 
 export { useState, useEffect, useReducer, render };

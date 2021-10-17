@@ -1,2 +1,2 @@
 # not-react
-Created with CodeSandbox
+A very basic simulation of React `useState`, `useEffect` and `useReducer` hooks.

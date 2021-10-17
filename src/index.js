@@ -1,19 +1,8 @@
-// import "./styles.css";
-
-// document.getElementById("app").innerHTML = `
-// <h1>Hello Vanilla!</h1>
-// <div>
-//   We use the same configuration as Parcel to bundle this sandbox, you can find more
-//   info about Parcel
-//   <a href="https://parceljs.org" target="_blank" rel="noopener noreferrer">here</a>.
-// </div>
-// `;
-
 import * as NotReact from "./NotReact";
 
 const Component = () => {
   const [count, setCount] = NotReact.useState(0);
-  const [text, dispatchText] = NotReact.useReducer((text, action) => {
+  const textReducer = (text, action) => {
     switch (action) {
       case "uppercase":
         return text.toUpperCase();
@@ -22,7 +11,8 @@ const Component = () => {
       default:
         throw new Error(`Invalid action: ${action}`);
     }
-  }, "text");
+  };
+  const [text, dispatchText] = NotReact.useReducer(textReducer, "text");
 
   NotReact.useEffect(() => {
     console.log("effect:", { count, text });
@@ -46,6 +36,8 @@ const Component = () => {
     reset
   };
 };
+
+// Simulating initial render and re-renders triggered by user action.
 console.log("============= Initial Render =============");
 let app = NotReact.render(Component);
 console.log("======== Initial Render Complete =========");
