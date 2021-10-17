@@ -1,7 +1,7 @@
 const hooks = [];
 let currentHook = 0;
 
-type BasicStateAction<S> = (S) => S | S;
+type BasicStateAction<S> = (arg0: S) => S | S;
 type Dispatch<A> = (A) => void;
 
 const basicStateReducer = <S>(state: S, action: BasicStateAction<S>) => {
@@ -9,12 +9,12 @@ const basicStateReducer = <S>(state: S, action: BasicStateAction<S>) => {
 };
 
 const useReducer = <S, I, A>(
-  reducer: (state: S, action: A) => S,
+  reducer: (S, A) => S,
   initialState: I
 ): [S, Dispatch<A>] => {
   const index = currentHook;
   let state = hooks[index] || initialState;
-  const dispatch: Dispatch<A> = (action) => {
+  const dispatch: Dispatch<A> = (action: A) => {
     const newState = reducer(state, action);
     hooks[index] = newState;
   };
@@ -22,7 +22,9 @@ const useReducer = <S, I, A>(
   return [state, dispatch];
 };
 
-const useState = <S>(initialState: (() => S) | S) => {
+const useState = <S>(
+  initialState: (() => S) | S
+): [S, Dispatch<BasicStateAction<S>>] => {
   // const setStateHookIndex = currentHook;
   // let state = hooks[setStateHookIndex] || initialState;
   // currentHook++;
