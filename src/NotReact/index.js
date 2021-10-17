@@ -1,1 +1,1 @@
-export { useState, useEffect, render } from "./NotReact";
+export { useState, useEffect, useReducer, render } from "./NotReact";

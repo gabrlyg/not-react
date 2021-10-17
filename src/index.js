@@ -13,7 +13,16 @@ import * as NotReact from "./NotReact";
 
 const Component = () => {
   const [count, setCount] = NotReact.useState(0);
-  const [text, setText] = NotReact.useState("text");
+  const [text, dispatchText] = NotReact.useReducer((text, action) => {
+    switch (action) {
+      case "uppercase":
+        return text.toUpperCase();
+      case "lowercase":
+        return text.toLowerCase();
+      default:
+        throw new Error(`Invalid action: ${action}`);
+    }
+  }, "text");
 
   NotReact.useEffect(() => {
     console.log("effect:", { count, text });
@@ -21,7 +30,7 @@ const Component = () => {
 
   const click = () => {
     setCount(count + 1);
-    setText(text === "text" ? "TEXT" : "text");
+    dispatchText(text === "text" ? "uppercase" : "lowercase");
   };
   const reset = () => {
     setCount(0);

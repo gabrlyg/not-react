@@ -67,4 +67,4 @@ const render = (FunctionComponent) => {
 //   return context
 // }
 
-export { useState, useEffect, render };
+export { useState, useEffect, useReducer, render };
