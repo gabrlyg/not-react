@@ -1,50 +1,62 @@
-import * as NotReact from "./NotReact";
+import * as NotReact from './NotReact'
 
-const Component = () => {
-  const [count, setCount] = NotReact.useState(0);
-  const textReducer = (text, action) => {
-    switch (action) {
-      case "uppercase":
-        return text.toUpperCase();
-      case "lowercase":
-        return text.toLowerCase();
+const NotAComponent = () => {
+  const [count, setCount] = NotReact.useState(0)
+  const initialAnotherCount = {
+    count: 0,
+  }
+  const countReducer = (state, action) => {
+    switch (action.type) {
+      case 'increment':
+        return {
+          count: state.count + 1,
+        }
+      case 'decrement':
+        return {
+          count: state.count - 1,
+        }
       default:
-        throw new Error(`Invalid action: ${action}`);
+        throw new Error(`Count Reducer: Invalid action type: "${action.type}"`)
     }
-  };
-  const [text, dispatchText] = NotReact.useReducer(textReducer, "text");
+  }
+  const [anotherCount, dispatchAnotherCount] = NotReact.useReducer(
+    countReducer,
+    initialAnotherCount
+  )
 
   NotReact.useEffect(() => {
-    console.log("effect:", { count, text });
-  }, [count, text]);
+    console.log('effect:', { count, anotherCount: anotherCount.count })
+  }, [count, anotherCount])
 
   const click = () => {
-    setCount(count + 1);
-    dispatchText(text === "text" ? "uppercase" : "lowercase");
-  };
+    setCount(count + 1)
+    dispatchAnotherCount({
+      type: anotherCount.count > 0 ? 'decrement' : 'increment',
+    })
+  }
   const reset = () => {
-    setCount(0);
-  };
+    setCount(0)
+  }
 
   const render = () => {
-    console.log("render:", { count, text });
-  };
+    console.log('render:', { count, anotherCount: anotherCount.count })
+  }
 
   return {
     render,
     click,
-    reset
-  };
-};
+    reset,
+  }
+}
 
 // Simulating initial render and re-renders triggered by user action.
-console.log("============= Initial Render =============");
-let app = NotReact.render(Component);
-console.log("======== Initial Render Complete =========");
+console.log('============= Initial Render =============')
+let app = NotReact.render(NotAComponent)
+console.log('======== Initial Render Complete =========')
 for (let i = 0; i < 3; i++) {
-  app.click();
-  console.log("============= Re-render =============");
-  app = NotReact.render(Component);
-  console.log("============= Render Complete ==========");
+  app.click()
+  console.log('============= Re-render =============')
+  app = NotReact.render(NotAComponent)
+  console.log('============= Render Complete ==========')
 }
-app.reset();
+app.reset()

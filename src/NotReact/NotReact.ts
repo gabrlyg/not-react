@@ -1,53 +1,53 @@
-const hooks = [];
-let currentHook = 0;
+const hooks = []
+let currentHook = 0
 
-type BasicStateAction<S> = (arg0: S) => S | S;
-type Dispatch<A> = (A) => void;
+type BasicStateAction<S> = (arg0: S) => S | S
+type Dispatch<A> = (A) => void
 
 const basicStateReducer = <S>(state: S, action: BasicStateAction<S>) => {
-  return typeof action === "function" ? action(state) : action;
-};
+  return typeof action === 'function' ? action(state) : action
+}
 
 const useReducer = <S, I, A>(
   reducer: (S, A) => S,
   initialState: I
 ): [S, Dispatch<A>] => {
-  const index = currentHook;
-  let state = hooks[index] || initialState;
+  const index = currentHook
+  let state = hooks[index] || initialState
   const dispatch: Dispatch<A> = (action: A) => {
-    const newState = reducer(state, action);
-    hooks[index] = newState;
-  };
-  currentHook++;
-  return [state, dispatch];
-};
+    const newState = reducer(state, action)
+    hooks[index] = newState
+  }
+  currentHook++
+  return [state, dispatch]
+}
 
 const useState = <S>(
   initialState: (() => S) | S
 ): [S, Dispatch<BasicStateAction<S>>] => {
-  return useReducer(basicStateReducer, initialState);
-};
+  return useReducer(basicStateReducer, initialState)
+}
 
 const useEffect = (callback: Function, depsArray: any[]) => {
-  const hasNoDeps = !depsArray;
-  const currentEffectDeps = hooks[currentHook];
+  const hasNoDeps = !depsArray
+  const currentEffectDeps = hooks[currentHook]
   const hasChangedDeps = currentEffectDeps
     ? !depsArray.every((item, index) =>
         Object.is(item, currentEffectDeps[index])
       )
-    : true;
+    : true
   if (hasNoDeps || hasChangedDeps) {
-    callback();
-    hooks[currentHook] = depsArray;
+    callback()
+    hooks[currentHook] = depsArray
   }
-  currentHook++;
-};
+  currentHook++
+}
 
 const render = (FunctionComponent) => {
-  let result = FunctionComponent();
-  result.render();
-  currentHook = 0;
-  return result;
-};
+  let result = FunctionComponent()
+  result.render()
+  currentHook = 0
+  return result
+}
 
-export { useState, useEffect, useReducer, render };
+export { useState, useEffect, useReducer, render }
